@@ -1,12 +1,12 @@
-package projectServices
+package groupCategoryServices
 
 import "event-backend/model"
 
-func Create(status *model.Status) (*model.Status, error) {
+func Create(groupCategory *model.GroupCategory) (*model.GroupCategory, error) {
 
-	if result := model.DB.Create(&status); result.Error != nil {
-		return &model.Status{}, result.Error
+	if result := model.DB.Create(&groupCategory); result.Error != nil {
+		return &model.GroupCategory{}, result.Error
 	}
 
-	return status, nil
+	return groupCategory, nil
 }

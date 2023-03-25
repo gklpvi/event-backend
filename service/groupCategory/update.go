@@ -1,19 +1,19 @@
-package projectServices
+package groupCategoryServices
 
 import (
 	"event-backend/model"
-	"event-backend/model/inputs"
+	"event-backend/model/input"
 )
 
-func Update(input *inputs.UpdateStatusInput) error {
-	var status model.Status
+func Update(input *input.UpdateGroupCategoryInput) error {
+	var groupCategory model.GroupCategory
 
-	if result := model.DB.First(&status, input.Id); result.Error != nil {
+	if result := model.DB.First(&groupCategory, input.Id); result.Error != nil {
 		return result.Error
 	}
-	status.Name = input.Name
-	status.Type = input.Type
+	groupCategory.Name = input.Name
+	groupCategory.MaxLevel = input.MaxLevel
 
-	model.DB.Save(&status)
+	model.DB.Save(&groupCategory)
 	return nil
 }

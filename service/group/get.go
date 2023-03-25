@@ -1,28 +1,19 @@
-package projectServices
+package groupServices
 
 import "event-backend/model"
 
-func GetById(id uint) (*model.Project, error) {
-	var project model.Project
-	if result := model.DB.Preload("Profile").First(&project, id); result.Error != nil {
-		return &model.Project{}, result.Error
+func GetById(id uint) (*model.Group, error) {
+	var group model.Group
+	if result := model.DB.First(&group, id); result.Error != nil {
+		return &model.Group{}, result.Error
 	}
-	return &project, nil
+	return &group, nil
 }
 
-func GetAll() ([]model.Project, error) {
-	var project []model.Project
-	if result := model.DB.Preload("Profile").Find(&project); result.Error != nil {
+func GetAll() ([]model.Group, error) {
+	var group []model.Group
+	if result := model.DB.Find(&group); result.Error != nil {
 		return nil, result.Error
 	}
-	return project, nil
-}
-
-func GetDetails(id uint) (*model.Project, error) {
-	var project model.Project
-	if err := model.DB.Preload("Files").Preload("Files.Profile").Preload("Comments").Preload("Comments.Profile").Preload("Application").Preload("Application.Profile").Preload("Source").Preload("Source.Profile").Preload("Link").Preload("Link.Profile").Preload("Profile").Preload("Requirement").Preload("Requirement.Profile").Preload("ProjectStudent").Preload("ProjectStudent.Profile").First(&project, id).Error; err != nil {
-		return &model.Project{}, err
-	}
-
-	return &project, nil
+	return group, nil
 }

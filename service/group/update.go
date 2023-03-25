@@ -1,21 +1,19 @@
-package projectServices
+package groupServices
 
 import (
 	"event-backend/model"
+	"event-backend/model/input"
 )
 
-func Update(input *inputs.UpdateProjectInput) error {
-	var project model.Project
-	if result := model.DB.First(&project, input.Id); result.Error != nil {
+func Update(input *input.UpdateGroupInput) error {
+	var group model.Group
+	if result := model.DB.First(&group, input.Id); result.Error != nil {
 		return result.Error
 	}
 
-	project.Title = input.Title
-	project.Major = input.Major
-	project.Capacity = input.Capacity
-	project.Status = input.Status
-	project.ProfileID = input.InstructorID
+	group.GroupCategoryID = input.GroupCategoryID
+	group.MaxMember = input.MaxMember
 
-	model.DB.Save(&project)
+	model.DB.Save(&group)
 	return nil
 }

@@ -1,11 +1,11 @@
-package projectServices
+package groupServices
 
 import "event-backend/model"
 
-func Create(project *model.Project) (*model.Project, error) {
-	if result := model.DB.Create(&project); result.Error != nil {
-		return &model.Project{}, result.Error
+func Create(group *model.Group) (*model.Group, error) {
+	if result := model.DB.Create(&group); result.Error != nil {
+		return &model.Group{}, result.Error
 	}
 
-	return project, nil
+	return group, nil
 }
