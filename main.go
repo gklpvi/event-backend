@@ -28,10 +28,9 @@ func main() {
 	router := gin.Default()
 
 	// Setup route groups for the API
-	auth_routes := router.Group("/auth")
+	authRoutes := router.Group("/auth")
 	{
-		route.LoginRouter(auth_routes)
-		route.RegisterRouter(auth_routes)
+		route.AuthRouter(authRoutes)
 	}
 
 	protected := router.Group("/protected")

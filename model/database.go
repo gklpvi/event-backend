@@ -31,12 +31,21 @@ func ConnectDataBase() {
 		fmt.Println("connected to database ", DbName)
 	}
 
-	// DB.AutoMigrate(&User{})
+	DB.AutoMigrate(&User{})
 	
-	// DB.AutoMigrate(&Profile{})
-	// DB.AutoMigrate(&Profile{}, &User{})
-	// DB.Model(&Profile{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
+	DB.AutoMigrate(&Profile{})
+	DB.AutoMigrate(&Profile{}, &User{})
+	DB.Model(&Profile{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
 
+	DB.AutoMigrate(&Group{})
+	DB.AutoMigrate(&Group{}, &GroupCategory{})
+	DB.Model(&Group{}).AddForeignKey("group_category_id", "group_categories(id)", "CASCADE", "CASCADE")
+	
+	DB.AutoMigrate(&GroupMember{})
+	DB.AutoMigrate(&GroupMember{}, &Profile{})
+	DB.Model(&GroupMember{}).AddForeignKey("profile_id", "profiles(id)", "CASCADE", "CASCADE")
+
+	DB.AutoMigrate(&GroupCategory{})
 }
 
 func DisconnectDataBase() {

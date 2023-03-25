@@ -3,6 +3,8 @@ package auth
 import (
 	"event-backend/model"
 	"event-backend/service/auth"
+	profileServices "event-backend/service/profile"
+	userServices "event-backend/service/user"
 	"event-backend/util"
 	"net/http"
 
@@ -10,6 +12,7 @@ import (
 )
 
 type RegisterInput struct {
+	Username string `json:"username" binding:"required"`
 	Mail     string `json:"mail" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
@@ -20,11 +23,17 @@ func RegisterController(c *gin.Context) {
 		return
 	}
 
+	fetchedUser, _ := userServices.GetByMail(input.Mail);
+	if fetchedUser.ID != 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Mail already exists", "data": ""})
+		return
+	}
+	
 	var user model.User
 	user.Mail = input.Mail
 
 	valid := util.MailValidation(user.Mail)
-	if valid != true {
+	if !valid {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid mail", "data": ""})
 		return
 	}
@@ -38,6 +47,15 @@ func RegisterController(c *gin.Context) {
 	user.Password = password
 	u, err := auth.RegisterService(&user)
 	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error!", "data": err.Error()})
+		return
+	}
+	
+	profile := model.Profile{
+		UserID: u.ID,
+		Username: input.Username,
+	}
+	if _, err = profileServices.Create(&profile); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error!", "data": err.Error()})
 		return
 	}
