@@ -1,11 +1,11 @@
 package userServices
 
-import "gradpanel-backend/models"
+import "event-backend/model"
 
-func Create(user *models.User) (*models.User, error) {
+func Create(user *model.User) (*model.User, error) {
 
-	if result := models.DB.Create(&user); result.Error != nil {
-		return &models.User{}, result.Error
+	if result := model.DB.Create(&user); result.Error != nil {
+		return &model.User{}, result.Error
 	}
 
 	return user, nil

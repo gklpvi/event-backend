@@ -1,18 +1,17 @@
 package userServices
 
 import (
-	"gradpanel-backend/models"
-	"gradpanel-backend/models/inputs"
+	"event-backend/model"
+	"event-backend/model/input"
 )
 
-func Update(input *inputs.UpdateUserInput) error {
-	var user models.User
+func Update(input *input.UpdateUserInput) error {
+	var user model.User
 
-	if result := models.DB.First(&user, input.Id); result.Error != nil {
+	if result := model.DB.First(&user, input.Id); result.Error != nil {
 		return result.Error
 	}
-	user.Verified = input.Verified
 
-	models.DB.Save(&user)
+	model.DB.Save(&user)
 	return nil
 }

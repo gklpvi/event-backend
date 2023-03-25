@@ -1,10 +1,10 @@
 package projectServices
 
-import "gradpanel-backend/models"
+import "event-backend/model"
 
-func Create(project *models.Project) (*models.Project, error) {
-	if result := models.DB.Create(&project); result.Error != nil {
-		return &models.Project{}, result.Error
+func Create(project *model.Project) (*model.Project, error) {
+	if result := model.DB.Create(&project); result.Error != nil {
+		return &model.Project{}, result.Error
 	}
 
 	return project, nil

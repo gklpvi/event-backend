@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	profileServices "event-backend/service/profileServices"
+	profileServices "event-backend/service/profile"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"

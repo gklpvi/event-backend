@@ -1,4 +1,4 @@
-package inputs
+package input
 
 type UpdateProfileInput struct{
 	Id            uint   `json:"id"`

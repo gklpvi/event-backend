@@ -1,4 +1,4 @@
-module event-backend/main
+module event-backend
 
 go 1.19
 

@@ -1,13 +1,12 @@
 package projectServices
 
 import (
-	"gradpanel-backend/models"
-	"gradpanel-backend/models/inputs"
+	"event-backend/model"
 )
 
 func Update(input *inputs.UpdateProjectInput) error {
-	var project models.Project
-	if result := models.DB.First(&project, input.Id); result.Error != nil {
+	var project model.Project
+	if result := model.DB.First(&project, input.Id); result.Error != nil {
 		return result.Error
 	}
 
@@ -17,6 +16,6 @@ func Update(input *inputs.UpdateProjectInput) error {
 	project.Status = input.Status
 	project.ProfileID = input.InstructorID
 
-	models.DB.Save(&project)
+	model.DB.Save(&project)
 	return nil
 }
