@@ -60,7 +60,7 @@ func TokenValid(c *gin.Context) error {
 }
 
 // function to generate token for the user with the given credentials
-func GenerateToken(userId uint, role string) (string, error) {
+func GenerateToken(userId uint) (string, error) {
 	token_lifespan, err := strconv.Atoi(os.Getenv("TOKEN_HOUR_LIFESPAN"))
 	if err != nil {
 		return "", err
@@ -73,7 +73,6 @@ func GenerateToken(userId uint, role string) (string, error) {
 		return "", err
 	}
 	claims["profileId"] = profile.ID
-	claims["role"] = role
 	claims["exp"] = time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
