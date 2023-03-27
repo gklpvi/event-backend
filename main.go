@@ -1,3 +1,7 @@
+/*
+Gamegos Case Study for Backend Engineer Position
+-Gökalp Akartepe
+*/
 package main
 
 import (
@@ -5,8 +9,8 @@ import (
 	"os"
 
 	middleware "event-backend/middleware"
-	route "event-backend/route"
 	model "event-backend/model"
+	route "event-backend/route"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"

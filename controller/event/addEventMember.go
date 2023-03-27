@@ -38,11 +38,12 @@ func getLock(eventId string) *sync.Mutex {
 	return lock
 }
 
+// in addition to its concurrent structure, it also can work more efficiently by using goroutines and gochannels as asycnchronous tasks
 func AddEventMemberController(c *gin.Context) {
 	var group *model.Group
 	var groupMember model.GroupMember
 
-	// Get player ID from authorization
+	// Extract player ID from JWT authorization token
 	playerId, err := util.ExtractTokenID(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error!", "data": err.Error()})
@@ -75,7 +76,22 @@ func AddEventMemberController(c *gin.Context) {
 
 	// Check if player already joined the event, this method uses transaction to protect the data integrity
 	if groupMemberServices.HasJoinedEvent(playerId, eventId) {
-		c.JSON(http.StatusOK, gin.H{"message": "player joined event successfully", "data": playerProfile})
+		group, err = groupServices.GetByPlayerId(playerId, uint(eventId))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error!", "data": err.Error()})
+			return
+		}
+		players, err := groupServices.GetGroupMembers(group.ID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error!", "data": err.Error()})
+			return
+		}
+		// get list of ids of the players in the group
+		playerIds := make([]uint, len(players))
+		for i, player := range players {
+			playerIds[i] = player.ID
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "player joined event successfully", "groupID": group.ID, "playerIds": playerIds})
 		return
 	}
 
@@ -147,5 +163,15 @@ func AddEventMemberController(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "player joined event successfully", "data": playerProfile})
+	players, err := groupServices.GetGroupMembers(group.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error!", "data": err.Error()})
+		return
+	}
+	// get list of ids of the players in the group
+	playerIds := make([]uint, len(players))
+	for i, player := range players {
+		playerIds[i] = player.ID
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "player joined event successfully", "groupID": group.ID, "playerIDs": playerIds})
 }
