@@ -9,6 +9,6 @@ import (
 func EventRouter(r *gin.RouterGroup) {
 	routes := r.Group("/event")
 	{
-		routes.POST("/add-event-member", event.AddEventMemberController)
+		routes.GET("/add-event-member", event.AddEventMemberController)
 	}
 }

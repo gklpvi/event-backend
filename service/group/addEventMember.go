@@ -9,17 +9,26 @@ func IsGroupFull(groupID uint) (bool) {
 	if result := model.DB.Preload("GroupMembers").First(&group, groupID); result.Error != nil {
 		return false
 	}
-
-	if len(group.GroupMembers) >= group.MaxMember {
-		return true
-	}
-
-	return false
+	// return true if group has reached its max member capacity
+	return len(group.GroupMembers) >= group.MaxMember
 }
 
-func GetByLevel(level int, eventID uint64) (*model.Group, error){
+func GetByLevel(level int, eventID uint64) (*model.Group, error) {
 	var group model.Group
-	if result := model.DB.Where("level=? AND event_id=?", level, eventID).First(&group); result.Error != nil {
+
+	// levels for the group categories are hardcoded since the document says so but in the future it can be dynamic since the model and database already support it
+	groupCategoryId := func(level int) uint {
+		if level >= 0 && level < 20 {
+			return 1
+		} else if level >= 20 && level < 50 {
+			return 2
+		} else {
+			return 3
+		}
+	}(level)
+
+	// get group by group category id and event id
+	if result := model.DB.Where("group_category_id=? AND event_id=?", groupCategoryId, eventID).First(&group); result.Error != nil {
 		return &model.Group{}, result.Error
 	}
 

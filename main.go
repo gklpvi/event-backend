@@ -34,7 +34,6 @@ func main() {
 	}
 
 	protected := router.Group("/protected")
-	protected.Use(middleware.BlacklistTokenMiddleware())
 	protected.Use(middleware.JwtAuthMiddleware())
 	{
 		route.UserRouter(protected)
@@ -42,6 +41,7 @@ func main() {
 		route.GroupRouter(protected)
 		route.GroupMemberRouter(protected)
 		route.GroupCategoryRouter(protected)
+		route.EventRouter(protected)
 	}
 
 	// Start and run the server

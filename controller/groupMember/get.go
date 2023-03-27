@@ -9,14 +9,13 @@ import (
 )
 
 func GetController(c *gin.Context) {
-
 	id := c.Query("id")
 	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "missing id!", "data": ""})
 		return
 	}
+	
 	uid, err := strconv.ParseUint(id, 10, 32)
-
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "missing id!", "data": ""})
 		return

@@ -46,6 +46,8 @@ func ConnectDataBase() {
 	DB.Model(&GroupMember{}).AddForeignKey("profile_id", "profiles(id)", "CASCADE", "CASCADE")
 
 	DB.AutoMigrate(&GroupCategory{})
+
+	DB.AutoMigrate(&Event{})
 }
 
 func DisconnectDataBase() {
