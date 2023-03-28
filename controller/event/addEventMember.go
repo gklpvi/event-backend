@@ -76,6 +76,7 @@ func AddEventMemberController(c *gin.Context) {
 
 	// Check if player already joined the event, this method uses transaction to protect the data integrity
 	if groupMemberServices.HasJoinedEvent(playerId, eventId) {
+		// If the user has already joined an event, return the group ID and the list of player IDs in the group as the registration is successful
 		group, err = groupServices.GetByPlayerId(playerId, uint(eventId))
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error!", "data": err.Error()})

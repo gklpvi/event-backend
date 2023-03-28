@@ -27,8 +27,8 @@ func GetByLevel(level int, eventID uint64) (*model.Group, error) {
 		}
 	}(level)
 
-	// get group by group category id and event id
-	if result := model.DB.Where("group_category_id=? AND event_id=?", groupCategoryId, eventID).First(&group); result.Error != nil {
+	// get last group by group category id and event id
+	if result := model.DB.Where("group_category_id=? AND event_id=?", groupCategoryId, eventID).Last(&group); result.Error != nil {
 		return &model.Group{}, result.Error
 	}
 
