@@ -17,7 +17,7 @@ var (
 	lockMap      = make(map[string]*sync.Mutex)
 	lockMapMutex = sync.Mutex{}
 )
-
+// also some kind of message queue can be used for concurrency instead of mutex locks
 func getLock(eventId string) *sync.Mutex {
 	// Use a map to store mutex locks per event ID
 	// This ensures that each event has its own mutex lock
@@ -79,12 +79,12 @@ func AddEventMemberController(c *gin.Context) {
 		// If the user has already joined an event, return the group ID and the list of player IDs in the group as the registration is successful
 		group, err = groupServices.GetByPlayerId(playerId, uint(eventId))
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error!", "data": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error on get player by id!", "data": err.Error()})
 			return
 		}
 		players, err := groupServices.GetGroupMembers(group.ID)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error!", "data": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal error on get group members!", "data": err.Error()})
 			return
 		}
 		// get list of ids of the players in the group
